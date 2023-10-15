@@ -5,8 +5,9 @@
   "main": "app.js",
   "scripts": {
     
-    "start": "nodemon dist/app",
-    "build": "tsc --watch"
+    "start": "node dist/app",
+    "build": "tsc --watch",
+    "div":"nodemon dist/app"
   },
   "repository": {
     "type": "git",
