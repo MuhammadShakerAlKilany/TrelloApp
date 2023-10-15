@@ -168,7 +168,7 @@ async function sendVerified(email: string, token: string) {
     to: email,
     subject: "Sending Email using Node.js",
     text: "That was easy!",
-    html: `<a href='http://127.0.0.1:3000/api/v1/users/verifie/${token}'>Verifie Email</a>`,
+    html: `<a href='${process.env.URL}/api/v1/users/verifie/${token}'>Verifie Email</a>`,
   };
 
   const info = await transporter.sendMail(mailOptions);
