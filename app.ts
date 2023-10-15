@@ -4,9 +4,11 @@ import "dotenv"
 import errorHandler from "./middleware/errorHandler";
 import {routeApp} from "./router/app.routes";
 import cookieParser from "cookie-parser"
+import cors from "cors";
 const app:Express = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT 
 const mongodbURL:string  = process.env.MONGODB_URL||"mongodb://127.0.0.1:27017/TrelloApp" 
+app.use(cors())
 app.use(express.json())
 app.use(cookieParser())
 app.use((req,res,next)=>{
