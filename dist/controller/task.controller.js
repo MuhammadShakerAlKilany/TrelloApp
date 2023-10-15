@@ -44,10 +44,14 @@ exports.updateTask = (0, tryCatchErr_1.default)((req, res) => __awaiter(void 0, 
     if (!tokenData)
         return res.status(401).json({ message: "you are logOut" });
     if (!(taskToUpdate.title || taskToUpdate.status || taskToUpdate.description))
-        return res.status(404).json({ message: "No title||status||description found" });
+        return res
+            .status(404)
+            .json({ message: "No title||status||description found" });
     const taskUpdated = yield taskDao.updateTask(id, tokenData._id, taskToUpdate);
     if (!taskUpdated)
-        return res.status(404).json({ message: `No found task in id:${id} or you are not creator` });
+        return res
+            .status(404)
+            .json({ message: `No found task in id:${id} or you are not creator` });
     res.json({ message: "Updated task", data: taskUpdated });
 }));
 exports.deleteTask = (0, tryCatchErr_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -61,7 +65,9 @@ exports.deleteTask = (0, tryCatchErr_1.default)((req, res) => __awaiter(void 0, 
         return res.status(401).json({ message: "you are logOut" });
     const taskDeleted = yield taskDao.deleteTask(id, tokenData._id);
     if (!taskDeleted)
-        return res.status(404).json({ message: `No found task in id:${id} or you are not creator` });
+        return res
+            .status(404)
+            .json({ message: `No found task in id:${id} or you are not creator` });
     res.json({ message: "Deleted task", data: taskDeleted });
 }));
 exports.getAllTask = (0, tryCatchErr_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {

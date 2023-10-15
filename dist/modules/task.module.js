@@ -4,32 +4,32 @@ const mongoose_1 = require("mongoose");
 const taskSchema = new mongoose_1.Schema({
     title: {
         type: String,
-        require: true
+        require: true,
     },
     description: {
         type: String,
-        require: true
+        require: true,
     },
     status: {
         type: String,
         enum: ["toDo", "doing", "done"],
-        default: "toDo"
+        default: "toDo",
     },
     userId: {
         type: mongoose_1.Types.ObjectId,
         required: true,
-        ref: "User"
+        ref: "User",
     },
     assignTo: {
         type: mongoose_1.Types.ObjectId,
         required: true,
-        ref: "User"
+        ref: "User",
     },
     deadline: {
         type: Date,
-        required: true
-    }
+        required: true,
+    },
 }, {
-    timestamps: true
+    timestamps: true,
 });
 exports.default = (0, mongoose_1.model)("Task", taskSchema);

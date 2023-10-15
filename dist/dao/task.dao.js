@@ -21,7 +21,9 @@ class TaskDao {
     }
     updateTask(id, userId, task) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield task_module_1.default.findOneAndUpdate({ _id: id, userId }, task, { new: true });
+            return yield task_module_1.default.findOneAndUpdate({ _id: id, userId }, task, {
+                new: true,
+            });
         });
     }
     deleteTask(id, userId) {
@@ -36,13 +38,19 @@ class TaskDao {
     }
     getAllTaskWithUserData() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield task_module_1.default.find().populate([{ path: 'userId', select: '-password' }, { path: "assignTo", select: '-password' }]);
+            return yield task_module_1.default.find().populate([
+                { path: "userId", select: "-password" },
+                { path: "assignTo", select: "-password" },
+            ]);
         });
     }
     getAllTaskNotDoneAfterDeadline() {
         return __awaiter(this, void 0, void 0, function* () {
             const know = new Date();
-            return yield task_module_1.default.find({ deadline: { $lt: know }, status: { $ne: "done" } });
+            return yield task_module_1.default.find({
+                deadline: { $lt: know },
+                status: { $ne: "done" },
+            });
         });
     }
 }

@@ -26,7 +26,10 @@ const guard = (0, tryCatchErr_1.default)((req, res, next) => __awaiter(void 0, v
             return res.status(401).json({ message: "you are logOut" });
     }
     catch (error) {
-        res.clearCookie("token").status(400).json({ message: "err in jwt verify you are logOut" });
+        res
+            .clearCookie("token")
+            .status(400)
+            .json({ message: "err in jwt verify you are logOut" });
         return;
     }
     next();

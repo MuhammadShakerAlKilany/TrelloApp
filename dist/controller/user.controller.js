@@ -23,17 +23,24 @@ const userDao = new user_dao_1.default();
 exports.signUp = (0, tryCatchErr_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = req.body;
     const newUser = yield userDao.addUser(user);
-    // console.log({...newUser}) 
+    // console.log({...newUser})
     const data = Object.create(newUser);
     data.password = undefined;
     const token = jsonwebtoken_1.default.sign(data.toJSON(), process.env.SECRET_KEY);
     yield sendVerified(newUser.email, token);
-    res.status(201).json({ message: `signUp succass check your email ${data.email} for verified`, data });
+    res
+        .status(201)
+        .json({
+        message: `signUp succass check your email ${data.email} for verified`,
+        data,
+    });
 }));
 exports.login = (0, tryCatchErr_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userFind = yield userDao.findUserByEmail(req.body.email);
     if (!userFind)
-        return res.status(404).json({ message: `Not found user with email ${req.body.email}` });
+        return res
+            .status(404)
+            .json({ message: `Not found user with email ${req.body.email}` });
     if (userFind) {
         if (userFind === null || userFind === void 0 ? void 0 : userFind.softDelete)
             return res.json({ message: `user is soft Delete` });
@@ -65,7 +72,7 @@ exports.softDelete = (0, tryCatchErr_1.default)((req, res) => __awaiter(void 0, 
     const token = (_a = req.cookies) === null || _a === void 0 ? void 0 : _a.token;
     const tokenData = jsonwebtoken_1.default.verify(token, process.env.SECRET_KEY);
     let isDelete;
-    isDelete = (req.method == "DELETE");
+    isDelete = req.method == "DELETE";
     const user = yield userDao.softDeleteUser(tokenData._id, isDelete);
     const data = user;
     data.password = undefined;
@@ -76,7 +83,9 @@ exports.updateUser = (0, tryCatchErr_1.default)((req, res) => __awaiter(void 0, 
     const user = req.body;
     let id;
     if (!(user.age || user.password || user.userName))
-        return res.status(404).json({ message: "no age||password||userName to update " });
+        return res
+            .status(404)
+            .json({ message: "no age||password||userName to update " });
     if ((_b = req.params) === null || _b === void 0 ? void 0 : _b.id) {
         id = (_c = req.params) === null || _c === void 0 ? void 0 : _c.id;
     }
@@ -88,13 +97,15 @@ exports.updateUser = (0, tryCatchErr_1.default)((req, res) => __awaiter(void 0, 
         id = tokenData._id;
     }
     // console.log(id)
-    const userUpdate = yield userDao.updateUser(id, user);
+    const userUpdate = (yield userDao.updateUser(id, user));
     //   console.log(userUpdate)
     if (!userUpdate)
         return res.status(403).json({ message: "you are logOut " });
     userUpdate.password = undefined;
     const token = jsonwebtoken_1.default.sign(userUpdate.toJSON(), process.env.SECRET_KEY);
-    return res.cookie("token", token).json({ message: "Updated", data: userUpdate });
+    return res
+        .cookie("token", token)
+        .json({ message: "Updated", data: userUpdate });
 }));
 exports.deleteUser = (0, tryCatchErr_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _e, _f, _g;
@@ -109,7 +120,7 @@ exports.deleteUser = (0, tryCatchErr_1.default)((req, res) => __awaiter(void 0, 
         const tokenData = jsonwebtoken_1.default.verify(token, process.env.SECRET_KEY);
         id = tokenData._id;
     }
-    const userDeleted = yield userDao.deleteUserById(id);
+    const userDeleted = (yield userDao.deleteUserById(id));
     if (userDeleted)
         return res.status(404).json({ message: "not found user" });
     res.json({ message: "Deleted", data: userDeleted });
@@ -124,20 +135,20 @@ exports.logout = (0, tryCatchErr_1.default)((req, res) => __awaiter(void 0, void
 function sendVerified(email, token) {
     return __awaiter(this, void 0, void 0, function* () {
         const transporter = nodemailer_1.default.createTransport({
-            service: 'gmail',
+            service: "gmail",
             auth: {
                 user: process.env.USER_EMAIL,
-                pass: process.env.PASS_EMAIL
-            }
+                pass: process.env.PASS_EMAIL,
+            },
         });
         const mailOptions = {
             from: process.env.USER_EMAIL,
             to: email,
-            subject: 'Sending Email using Node.js',
-            text: 'That was easy!',
-            html: `<a href='http://127.0.0.1:3000/api/v1/users/verifie/${token}'>Verifie Email</a>`
+            subject: "Sending Email using Node.js",
+            text: "That was easy!",
+            html: `<a href='http://127.0.0.1:3000/api/v1/users/verifie/${token}'>Verifie Email</a>`,
         };
         const info = yield transporter.sendMail(mailOptions);
-        console.log('Email sent: ' + info.response);
+        console.log("Email sent: " + info.response);
     });
 }

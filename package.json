@@ -4,7 +4,7 @@
   "description": "finalTask_miya",
   "main": "app.js",
   "scripts": {
-    "prestart": "tsc",
+    
     "start": "nodemon dist/app",
     "build": "tsc --watch"
   },

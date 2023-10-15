@@ -9,9 +9,11 @@ require("dotenv");
 const errorHandler_1 = __importDefault(require("./middleware/errorHandler"));
 const app_routes_1 = require("./router/app.routes");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 const mongodbURL = process.env.MONGODB_URL || "mongodb://127.0.0.1:27017/TrelloApp";
+app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use((req, res, next) => {
@@ -29,8 +31,11 @@ app.use(errorHandler_1.default);
 app.listen(port, () => {
     console.log(`server run in http://127.0.0.1:${port}/api/v1 `);
 });
-mongoose_1.default.connect(mongodbURL).then(() => {
+mongoose_1.default
+    .connect(mongodbURL)
+    .then(() => {
     console.log(`connected with ${mongodbURL}`);
-}).catch((err) => {
+})
+    .catch((err) => {
     console.log(err);
 });

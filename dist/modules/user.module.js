@@ -17,7 +17,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const userSchema = new mongoose_1.Schema({
     userName: {
         type: String,
-        required: true
+        required: true,
     },
     email: {
         type: String,
@@ -26,16 +26,16 @@ const userSchema = new mongoose_1.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: true,
     },
     age: {
         type: Number,
-        required: true
+        required: true,
     },
     gender: {
         type: String,
         enum: ["male", "female"],
-        required: true
+        required: true,
     },
     phone: {
         type: Number,
@@ -43,15 +43,15 @@ const userSchema = new mongoose_1.Schema({
     isVerified: {
         type: Boolean,
         required: true,
-        default: false
+        default: false,
     },
     softDelete: {
         type: Boolean,
         required: true,
-        default: false
-    }
+        default: false,
+    },
 }, {
-    timestamps: true
+    timestamps: true,
 });
 userSchema.pre("save", function () {
     return __awaiter(this, void 0, void 0, function* () {

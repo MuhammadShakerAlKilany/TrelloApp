@@ -9,9 +9,15 @@ exports.taskJoiSchema = joi_1.default.object({
     title: joi_1.default.string().min(5).max(50).required(),
     description: joi_1.default.string().min(5).max(50).required(),
     status: joi_1.default.string().valid("toDo", "doing", "done"),
-    userId: joi_1.default.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
-    assignTo: joi_1.default.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
-    deadline: joi_1.default.date().required()
+    userId: joi_1.default
+        .string()
+        .pattern(/^[0-9a-fA-F]{24}$/)
+        .required(),
+    assignTo: joi_1.default
+        .string()
+        .pattern(/^[0-9a-fA-F]{24}$/)
+        .required(),
+    deadline: joi_1.default.date().required(),
 });
 exports.taskJoiSchemaUpdate = joi_1.default.object({
     title: joi_1.default.string().min(5).max(50),
@@ -19,5 +25,8 @@ exports.taskJoiSchemaUpdate = joi_1.default.object({
     status: joi_1.default.string().valid("toDo", "doing", "done"),
 });
 exports.taskIdSchema = joi_1.default.object({
-    id: joi_1.default.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
+    id: joi_1.default
+        .string()
+        .pattern(/^[0-9a-fA-F]{24}$/)
+        .required(),
 });
