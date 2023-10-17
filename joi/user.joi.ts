@@ -13,7 +13,7 @@ export const userJoiSchemaSignUp = joi.object<UserSignUp>({
     .required(),
   password: joi
     .string()
-    .pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)
+    .pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,100}$/)
     .required(),
   age: joi.number().min(18).max(60).required(),
   gender: joi.string().valid("male", "female").required(),

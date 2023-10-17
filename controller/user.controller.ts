@@ -57,7 +57,7 @@ export const login = tryCatchErr<UserLogin, ResInterface<UserRes>>(
         data.password = undefined;
 
         const token = jwt.sign(data.toJSON(), process.env.SECRET_KEY!);
-        return res.cookie("token", token).json({ message: "user login", data });
+        return res.cookie("token", token,{httpOnly: true, signed: true, maxAge: (60 * 60 * 24 * 30) * 1000, sameSite: "none"}).json({ message: "user login", data });
       } else {
         return res.json({ message: "password is rong" });
       }
@@ -149,8 +149,6 @@ export const deleteUser = tryCatchErr<
 
 export const logout = tryCatchErr<never, ResInterface<never>>(
   async (req, res) => {
-    const token = req.cookies?.token;
-    if (token) return res.status(403).json({ message: "you are logOut" });
     res.clearCookie("token").json({ message: "you are logOut" });
   }
 );
