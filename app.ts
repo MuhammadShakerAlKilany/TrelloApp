@@ -11,7 +11,7 @@ const mongodbURL: string =
   process.env.MONGODB_URL || "mongodb://127.0.0.1:27017/TrelloApp";
 app.use(cors());
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser("token"));
 app.use((req, res, next) => {
   console.log("Method:", req.method, "URL:", req.url);
   next();
