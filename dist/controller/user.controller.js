@@ -51,7 +51,7 @@ exports.login = (0, tryCatchErr_1.default)((req, res) => __awaiter(void 0, void 
             const data = userFind;
             data.password = undefined;
             const token = jsonwebtoken_1.default.sign(data.toJSON(), process.env.SECRET_KEY);
-            return res.cookie("token", token).json({ message: "user login", data });
+            return res.cookie("token", token, { httpOnly: true, secure: true, signed: true, maxAge: (60 * 60 * 24 * 30) * 1000, sameSite: "none" }).json({ message: "user login", data, token: token });
         }
         else {
             return res.json({ message: "password is rong" });
@@ -126,10 +126,6 @@ exports.deleteUser = (0, tryCatchErr_1.default)((req, res) => __awaiter(void 0, 
     res.json({ message: "Deleted", data: userDeleted });
 }));
 exports.logout = (0, tryCatchErr_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _h;
-    const token = (_h = req.cookies) === null || _h === void 0 ? void 0 : _h.token;
-    if (token)
-        return res.status(403).json({ message: "you are logOut" });
     res.clearCookie("token").json({ message: "you are logOut" });
 }));
 function sendVerified(email, token) {
