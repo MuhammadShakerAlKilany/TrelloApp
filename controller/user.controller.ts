@@ -57,7 +57,7 @@ export const login = tryCatchErr<UserLogin, ResInterface<UserRes>>(
         data.password = undefined;
 
         const token = jwt.sign(data.toJSON(), process.env.SECRET_KEY!);
-        return res.cookie("token", token,{httpOnly: true, signed: true, maxAge: (60 * 60 * 24 * 30) * 1000, sameSite: "none"}).json({ message: "user login", data });
+        return res.cookie("token", token,{httpOnly: true, secure: true, signed: true, maxAge: (60 * 60 * 24 * 30) * 1000, sameSite: "none"}).json({ message: "user login", data });
       } else {
         return res.json({ message: "password is rong" });
       }
