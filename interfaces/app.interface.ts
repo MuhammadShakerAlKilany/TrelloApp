@@ -1,1 +1,1 @@
-export type ResInterface<dataType> = { message: string; data?: dataType };
+export type ResInterface<dataType> = { message: string; data?: dataType,token?:string };
