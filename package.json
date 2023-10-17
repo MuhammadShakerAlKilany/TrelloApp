@@ -7,7 +7,7 @@
     
     "start": "node dist/app",
     "build": "tsc --watch",
-    "div":"nodemon dist/app"
+    "dev":"nodemon dist/app"
   },
   "repository": {
     "type": "git",

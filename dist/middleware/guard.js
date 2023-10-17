@@ -17,15 +17,18 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 require("dotenv/config");
 const guard = (0, tryCatchErr_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    const token = (_a = req.cookies) === null || _a === void 0 ? void 0 : _a.token;
-    if (!token)
-        return res.status(401).json({ message: "you are logOut" });
+    let token = (_a = req.cookies) === null || _a === void 0 ? void 0 : _a.token;
+    if (!token) {
+        req.cookies.token = req.headers.authorization;
+        token = req.headers.authorization;
+    }
     try {
         const tokenData = jsonwebtoken_1.default.verify(token, process.env.SECRET_KEY);
         if (!tokenData)
             return res.status(401).json({ message: "you are logOut" });
     }
     catch (error) {
+        console.log(error);
         res
             .clearCookie("token")
             .status(400)
