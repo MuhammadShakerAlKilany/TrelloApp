@@ -23,6 +23,8 @@ const guard = (0, tryCatchErr_1.default)((req, res, next) => __awaiter(void 0, v
         token = req.headers.authorization;
     }
     try {
+            console.log(token)
+
         const tokenData = jsonwebtoken_1.default.verify(token, process.env.SECRET_KEY);
         if (!tokenData)
             return res.status(401).json({ message: "you are logOut" });
