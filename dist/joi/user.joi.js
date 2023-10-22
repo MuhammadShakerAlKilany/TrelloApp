@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userIdSchema = exports.userJoiSchemaUpdateIdInBody = exports.userJoiSchemaUpdate = exports.userJoiSchemaLogeIn = exports.userJoiSchemaSignUp = void 0;
+exports.userJoiSchemaGoogleLogeIn = exports.userIdSchema = exports.userJoiSchemaUpdateIdInBody = exports.userJoiSchemaUpdate = exports.userJoiSchemaLogeIn = exports.userJoiSchemaSignUp = void 0;
 const joi_1 = __importDefault(require("joi"));
 exports.userJoiSchemaSignUp = joi_1.default.object({
     userName: joi_1.default.string().min(5).max(30).required(),
@@ -45,4 +45,9 @@ exports.userIdSchema = joi_1.default.object({
         .string()
         .pattern(/^[0-9a-fA-F]{24}$/)
         .required(),
+});
+exports.userJoiSchemaGoogleLogeIn = joi_1.default.object({
+    clientId: joi_1.default.string(),
+    credential: joi_1.default.string(),
+    select_by: joi_1.default.string()
 });

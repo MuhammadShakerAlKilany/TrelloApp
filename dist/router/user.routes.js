@@ -12,6 +12,7 @@ const task_joi_1 = require("../joi/task.joi");
 const router = (0, express_1.Router)();
 router.post("/signUp", (0, joiValidator_1.joiValidatorBody)(user_joi_1.userJoiSchemaSignUp), user_controller_1.signUp);
 router.post("/login", (0, joiValidator_1.joiValidatorBody)(user_joi_1.userJoiSchemaLogeIn), user_controller_1.login);
+router.post("/google_login", (0, joiValidator_1.joiValidatorBody)(user_joi_1.userJoiSchemaGoogleLogeIn), user_controller_1.googleLogin);
 router.get("/verifie/:token", user_controller_1.Verifi);
 router.route("/softDelete").all(guard_1.default).delete(user_controller_1.softDelete).get(user_controller_1.softDelete);
 router

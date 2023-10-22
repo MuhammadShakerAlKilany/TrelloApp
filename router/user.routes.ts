@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   Verifi,
   deleteUser,
+  googleLogin,
   login,
   logout,
   signUp,
@@ -17,6 +18,7 @@ import {
   userJoiSchemaLogeIn,
   userJoiSchemaUpdate,
   userJoiSchemaUpdateIdInBody,
+  userJoiSchemaGoogleLogeIn,
 } from "../joi/user.joi";
 import guard from "../middleware/guard";
 import { taskIdSchema } from "../joi/task.joi";
@@ -25,6 +27,7 @@ const router = Router();
 
 router.post("/signUp", joiValidatorBody(userJoiSchemaSignUp), signUp);
 router.post("/login", joiValidatorBody(userJoiSchemaLogeIn), login);
+router.post("/google_login", joiValidatorBody(userJoiSchemaGoogleLogeIn), googleLogin);
 router.get("/verifie/:token", Verifi);
 router.route("/softDelete").all(guard).delete(softDelete).get(softDelete);
 router
@@ -38,5 +41,6 @@ router
   .patch(joiValidatorBody(userJoiSchemaUpdate), updateUser)
   .delete(deleteUser);
 router.get("/logout", guard, logout);
+
 
 export default router;

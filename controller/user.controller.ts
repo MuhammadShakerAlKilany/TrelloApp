@@ -57,7 +57,7 @@ export const login = tryCatchErr<UserLogin, ResInterface<UserRes>>(
         data.password = undefined;
 
         const token = jwt.sign(data.toJSON(), process.env.SECRET_KEY!);
-        return res.cookie("token", token).json({ message: "user login", data ,token:token});
+        return res.cookie("token", token).json({ message: "user login", data, token: token });
       } else {
         return res.json({ message: "password is rong" });
       }
@@ -172,4 +172,57 @@ async function sendVerified(email: string, token: string) {
   const info = await transporter.sendMail(mailOptions);
 
   console.log("Email sent: " + info.response);
+}
+
+import { OAuth2Client } from 'google-auth-library';
+
+export const googleLogin = tryCatchErr<{ credential: string },{message:string,data:UserRes ,token:string }>(async (req, res) => {
+  const tokenGoogle = req.body.credential
+  const user = await verifyGoogleToken(tokenGoogle)
+  if (user) {
+    const userFind = await userDao.findUserByEmail(user?.email!) as UserRes
+    if (userFind) {
+      userFind.password =undefined
+      const token = jwt.sign(userFind.toJSON(), process.env.SECRET_KEY!);
+      return res.cookie("token", token).json({ message: "user login", data:userFind,token: token });
+    }else{
+      const tokenGoogle = req.body.credential
+      const user = await verifyGoogleToken(tokenGoogle) as unknown as UserSignUp
+      const newUser = await userDao.addUser(user);
+      const data = Object.create(newUser);
+      data.password = undefined;
+      const token = jwt.sign(data.toJSON(), process.env.SECRET_KEY!);
+  res.status(201)
+        .json({
+          message: ``,
+          data,token
+        }); 
+    }
+
+  }
+})
+
+async function verifyGoogleToken(token: string) {
+  const clientId = '880761381934-16eu08t3on4omt7mhtpspnds25quusdj.apps.googleusercontent.com';
+
+  const client = new OAuth2Client(clientId);
+
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: clientId,
+    });
+    const payload = ticket.getPayload() as unknown as { name: string, email: string, jti: string, }
+    const user: Pick<User, "email" | "password" | "userName" | "age" | "gender" | "isVerified"> = {
+      userName: payload.name,
+      email: payload.email,
+      password: payload.jti,
+      age: 0,
+      gender: "male",
+      isVerified: true,
+    }
+    return user;
+  } catch (error) {
+    console.error('Error verifying Google token:', error);
+  }
 }

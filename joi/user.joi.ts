@@ -47,3 +47,9 @@ export const userIdSchema = joi.object<{ id: string }>({
     .pattern(/^[0-9a-fA-F]{24}$/)
     .required(),
 });
+
+export const userJoiSchemaGoogleLogeIn = joi.object({
+  clientId:joi.string(), 
+  credential: joi.string(),
+  select_by:joi.string()
+});

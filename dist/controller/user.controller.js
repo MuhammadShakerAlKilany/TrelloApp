@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logout = exports.deleteUser = exports.updateUser = exports.softDelete = exports.Verifi = exports.login = exports.signUp = void 0;
+exports.googleLogin = exports.logout = exports.deleteUser = exports.updateUser = exports.softDelete = exports.Verifi = exports.login = exports.signUp = void 0;
 const tryCatchErr_1 = __importDefault(require("../middleware/tryCatchErr"));
 const user_dao_1 = __importDefault(require("../dao/user.dao"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -146,5 +146,56 @@ function sendVerified(email, token) {
         };
         const info = yield transporter.sendMail(mailOptions);
         console.log("Email sent: " + info.response);
+    });
+}
+const google_auth_library_1 = require("google-auth-library");
+exports.googleLogin = (0, tryCatchErr_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const tokenGoogle = req.body.credential;
+    const user = yield verifyGoogleToken(tokenGoogle);
+    if (user) {
+        const userFind = yield userDao.findUserByEmail(user === null || user === void 0 ? void 0 : user.email);
+        if (userFind) {
+            userFind.password = undefined;
+            const token = jsonwebtoken_1.default.sign(userFind.toJSON(), process.env.SECRET_KEY);
+            return res.cookie("token", token).json({ message: "user login", data: userFind, token: token });
+        }
+        else {
+            const tokenGoogle = req.body.credential;
+            const user = yield verifyGoogleToken(tokenGoogle);
+            const newUser = yield userDao.addUser(user);
+            const data = Object.create(newUser);
+            data.password = undefined;
+            const token = jsonwebtoken_1.default.sign(data.toJSON(), process.env.SECRET_KEY);
+            res.status(201)
+                .json({
+                message: ``,
+                data, token
+            });
+        }
+    }
+}));
+function verifyGoogleToken(token) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const clientId = '880761381934-16eu08t3on4omt7mhtpspnds25quusdj.apps.googleusercontent.com';
+        const client = new google_auth_library_1.OAuth2Client(clientId);
+        try {
+            const ticket = yield client.verifyIdToken({
+                idToken: token,
+                audience: clientId,
+            });
+            const payload = ticket.getPayload();
+            const user = {
+                userName: payload.name,
+                email: payload.email,
+                password: payload.jti,
+                age: 0,
+                gender: "male",
+                isVerified: true,
+            };
+            return user;
+        }
+        catch (error) {
+            console.error('Error verifying Google token:', error);
+        }
     });
 }
